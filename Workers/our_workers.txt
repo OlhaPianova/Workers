@@ -1,0 +1,14 @@
+ZINA
+PAVLENKO
+PR-manager
+2,4
+30
+8764653674
+zina@gmail.com
+Roman
+Prokopenko
+electrician
+3,8
+40
+0637775553
+Roman@gmail.com
