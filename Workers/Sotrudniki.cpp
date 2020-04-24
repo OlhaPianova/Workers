@@ -6,135 +6,251 @@
 using namespace std;
 
 #define SLEEP Sleep(1000);
+Worker* arrWorkers;
+int countWorker = 0;
+const string fileName = "our_workers.txt";
 
-Info* arrWorkers;
-int countWorkers = 0;
-
-void insertWorker(Info W){
-Info* temp = new Info[countWorkers + 1];
-	for (int i = 0; i < countWorkers; i++)
-		 {
+void insertWorker(Worker data)
+{
+	Worker* temp = new Worker[countWorker + 1];
+	for (int i = 0; i < countWorker; i++)
+	{
 		temp[i] = arrWorkers[i];
-		}
-	temp[countWorkers] = W;
-		countWorkers++;
-	arrWorkers = new Info[countWorkers];
-for (int i = 0; i < countWorkers; i++)
-		 {
+	}
+	temp[countWorker] = data;
+	countWorker++;
+	arrWorkers = new Worker[countWorker];
+	for (int i = 0; i < countWorker; i++)
+	{
 		arrWorkers[i] = temp[i];
-		}
+	}
 	delete[]temp;
-	}
-void addWorkers() {
-
-	ofstream fout;
-	fout.open("our_workers.txt", fstream::app);
-
-	bool isOpen = fout.is_open();
-	if (isOpen == false) {
-		cout << "Error: Application can't connecting to database file!" << endl;
-
-	}
-	else {
-		Info* temp = new Info[countWorkers + 1];
-		for (int i = 0; i < countWorkers; i++) {
-			temp[i] = arrWorkers[i];
-		}
-		int count = 0;
-		cout << "How many workers do you want to add? " << endl;
-		cin >> count;
-		temp[countWorkers].Count = count;
-		temp[countWorkers].OfficeWorker = new Worker[count];
-		for (int i = 0; i < count; i++) {
-			cout << endl;
-			cout << "Enter workers name: " << endl;
-			cin >> temp[countWorkers].OfficeWorker[i].name;
-			cout << "Enter workers surname: " << endl;
-			cin >> temp[countWorkers].OfficeWorker[i].surname;
-			cout << "Enter workers age : " << endl;
-			cin >> temp[countWorkers].OfficeWorker[i].age;
-			cout << "Enter workers job position: " << endl;
-			cin >> temp[countWorkers].OfficeWorker[i].job_position;
-			cout << "Enter workers experience: " << endl;
-			cin >> temp[countWorkers].OfficeWorker[i].experience;
-			cout << "Enter workers phone number: " << endl;
-			cin >> temp[countWorkers].OfficeWorker[i].phone_numb;
-			cout << "Enter workers email: " << endl;
-			cin >> temp[countWorkers].OfficeWorker[i].email;
-
-		}
-		fout << temp[countWorkers].Count << endl;
-		for (int i = 0; i < temp[countWorkers].Count; i++) {
-			fout << temp[countWorkers].OfficeWorker[i].name << endl;
-			fout << temp[countWorkers].OfficeWorker[i].surname << endl;
-			fout << temp[countWorkers].OfficeWorker[i].age<< endl;
-			fout << temp[countWorkers].OfficeWorker[i].job_position<< endl;
-			fout << temp[countWorkers].OfficeWorker[i].experience<< endl;
-			fout << temp[countWorkers].OfficeWorker[i].phone_numb << endl << endl;
-			fout << temp[countWorkers].OfficeWorker[i].email<< endl;
-		}
-		countWorkers++;
-		arrWorkers = new Info[countWorkers];
-		for (int i = 0; i < countWorkers; i++) {
-			arrWorkers[i] = temp[i];
-		}
-		delete[] temp;
-	}
-	fout.close();
 }
-void init(){
+void search_by_age()
+{
+	string search_age;
+	cout << "Enter surname of the worker for search: ";
+	cin >> search_age;
+	for (int i = 0; i < countWorker; i++)
+	{
+		if (arrWorkers[i].surname.find(search_age) != string::npos) {
+			cout << i + 1 << " " << arrWorkers[i].name;
+			cout << " " << arrWorkers[i].surname << endl;
+			cout << arrWorkers[i].age << endl;
+			cout << arrWorkers[i].job_position << endl;
+			cout << arrWorkers[i].experience << endl;
+			cout << arrWorkers[i].phone_numb << endl;
+			cout << arrWorkers[i].email << endl;
+		}
+	}
+}
+void init()
+{
 	ifstream fin;
-	fin.open("our_workers.txt");
+	fin.open(fileName);
 	bool isOpen = fin.is_open();
-	if (isOpen == true) {
-		while (!fin.eof()) {
-			Info getInfo;
-			fin >> getInfo.Count;
-			string t = "";
-			fin >> t;
-			int n = atoi(t.c_str());
-			getInfo.OfficeWorker = new Worker[n];
-			if (getInfo.Count != 0) {
-				for (int i = 0; i < n; i++) {
-					fin >> getInfo.OfficeWorker[i].name;
-					fin >> getInfo.OfficeWorker[i].surname;
-					fin >> getInfo.OfficeWorker[i].age;
-					fin >> getInfo.OfficeWorker[i].job_position;
-					fin >> getInfo.OfficeWorker[i].experience;
-					fin >> getInfo.OfficeWorker[i].phone_numb;
-					fin >> getInfo.OfficeWorker[i].email;
-				}
+	if (isOpen == true)
+	{
+		while (!fin.eof())
+		{
+			Worker temp;
+			fin.ignore();
+			getline(fin, temp.name);
+			if (temp.name != "") {
+				fin >> temp.surname;
+				fin >> temp.age;
+				fin >> temp.job_position;
+				fin >> temp.experience;
+				fin >> temp.phone_numb;
+				fin >> temp.email;
+
+				insertWorker(temp);
 			}
-			insertWorker(getInfo);
+			else {
+				break;
+			}
+
 		}
 	}
 	else {
-		cout << "Error: applciation can't open file!" << endl;
-		
+		cout << "Error: Application can't open data file!" << endl;
 	}
 }
 
+void addWorkers()
+{
+	ofstream fout;
+	fout.open(fileName, fstream::app);
+	bool isOpen = fout.is_open();
+	if (isOpen == true) {
+
+		Worker newWorker;
+		cout << "Enter worker's name: ";
+		cin>> newWorker.name;
+		cout << "Enter worker's surname: ";
+		cin>> newWorker.surname;
+		cout << "Enter worker's age: ";
+		cin>> newWorker.age;
+		cout << "Enter worker's job_position: ";
+		cin>> newWorker.job_position;
+		cout << "Enter worker's experience: ";
+		cin>> newWorker.experience;
+		cout << "Enter worker's phone_numb:";
+		cin>> newWorker.phone_numb;
+		cout << "Enter worker's email:";
+		cin>> newWorker.email;
+
+		insertWorker(newWorker);
+
+		fout << newWorker.name << endl;
+		fout << newWorker.surname << endl;
+		fout << newWorker.age << endl;
+		fout << newWorker.job_position << endl;
+		fout << newWorker.experience << endl;
+		fout << newWorker.phone_numb << endl;
+		fout << newWorker.email<< endl;
+
+		fout.close();
+	}
+	else {
+		cout << "Error: Application can't open data file!" << endl;
+	}
+}
 
 void listWorkers()
 {
-	cout << "\n\t\t\tWORKERS LIST: " << endl;
-	cout << endl;
-	for (int i = 0; i < countWorkers; i++) {
-		for (int j = 0; j < arrWorkers[i].Count; j++) {
-			SLEEP;
-			cout << endl;
-			cout << j + 1 << ". " << arrWorkers[i].OfficeWorker[j].name << endl;
-			cout << arrWorkers[i].OfficeWorker[j].surname << endl;
-			cout << "job position: " << " " << arrWorkers[i].OfficeWorker[j].job_position << endl;
-
-		}
+	cout << "\t\t\tAll workers:" << endl;
+	for (int i = 0; i < countWorker; i++)
+	{
+			cout << i + 1 << ". " << arrWorkers[i].name;
+			cout << " " << arrWorkers[i].surname << endl;
 	}
 	cout << endl;
 }
-void search_edit(){
-	cout << "Enteer workers surname for search: " << endl;
-	string surname = "";
-	cin >> surname;
 
+void search_by_surname()
+{
+	string infa;
+	cout << "Enter surname of the worker for search: ";
+	cin >> infa; 
+	for (int i = 0; i < countWorker; i++)
+	{
+		if (arrWorkers[i].surname.find(infa) != string::npos) {
+			cout<<i+1 <<" "<< arrWorkers[i].name ;
+			cout <<" "<< arrWorkers[i].surname << endl;
+			cout << arrWorkers[i].age << endl;
+			cout << arrWorkers[i].job_position << endl;
+			cout << arrWorkers[i].experience << endl;
+			cout << arrWorkers[i].phone_numb << endl;
+			cout << arrWorkers[i].email << endl;
+		}
+	}
+}
+void edit()
+{
+	listWorkers();
+	cout << "Select workers number do you want to edit :_ " << endl;
+	int workersNumb = 0;
+	cin >> workersNumb;
+
+	ofstream fout;
+	fout.open(fileName);
+	bool isOpen = fout.is_open();
+	if (isOpen == true) {
+
+		Worker* temp = new Worker[countWorker];
+		for (int i = 0; i < countWorker; i++)
+		{
+			temp[i] = arrWorkers[i];
+		}
+
+		cout << "Enter new details for this worker:" << endl;
+		cout << "Name: " << endl;
+		temp[workersNumb - 1].name == "";
+		cin >> temp[workersNumb - 1].name;
+		cout << "Surname: " << endl;
+		temp[workersNumb - 1].surname == "";
+		cin >> temp[workersNumb - 1].surname;
+		cout << "Age: " << endl;
+		temp[workersNumb - 1].age == "";
+		cin >> temp[workersNumb - 1].age;
+		cout << "Job position: " << endl;
+		temp[workersNumb - 1].job_position == "";
+		cin >> temp[workersNumb - 1].job_position;
+		cout << "Experience: " << endl;
+		temp[workersNumb - 1].experience == "";
+		cin >> temp[workersNumb - 1].experience;
+		cout << "Phone number: " << endl;
+		temp[workersNumb - 1].phone_numb == "";
+		cin >> temp[workersNumb - 1].phone_numb;
+		cout << "Email: " << endl;
+		temp[workersNumb - 1].email == "";
+		cin >> temp[workersNumb - 1].email;
+		for (int i = 0; i < countWorker;i++) {
+			fout << temp[i].name << endl;
+			fout << temp[i].surname << endl;
+			fout << temp[i].age << endl;
+			fout << temp[i].job_position << endl;
+			fout << temp[i].experience << endl;
+			fout << temp[i].phone_numb << endl;
+			fout << temp[i].email << endl;
+		}
+		
+		for (int i = 0; i < countWorker; i++)
+		{
+			arrWorkers[i] = temp[i];
+		}
+		delete[]temp;
+		fout.close();
+	}
+	else {
+		cout << "Application can't open data file!" << endl;
+	}
+}
+
+void delete_worker()
+{
+	listWorkers();
+	cout << "Select workers number do you want to delete :_ " << endl;
+	int workersNumb = 0;
+	cin >> workersNumb;
+	workersNumb--;
+	ofstream fout;
+	fout.open(fileName);
+	bool isOpen = fout.is_open();
+	if (isOpen == true) {
+
+		Worker* temp = new Worker[countWorker];
+		for (int i = 0; i < countWorker; i++)
+		{
+			if (i!= workersNumb) {
+				temp[i] = arrWorkers[i];
+			}
+		}
+	
+		countWorker--;
+		arrWorkers = new Worker[countWorker];
+		for (int i = 0; i < countWorker; i++)
+		{
+			if (temp[i].name != "") {
+				arrWorkers[i] = temp[i];
+			}
+
+		}
+		for (int i = 0; i < countWorker; i++) {
+			fout << temp[i].name << endl;
+			fout << temp[i].surname << endl;
+			fout << temp[i].age << endl;
+			fout << temp[i].job_position << endl;
+			fout << temp[i].experience << endl;
+			fout << temp[i].phone_numb << endl;
+			fout << temp[i].email << endl;
+		}
+		delete[]temp;
+		fout.close();
+	}
+	else {
+		cout << "Error: Application can't open data file!" << endl;
+	}
 }
 

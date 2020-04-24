@@ -14,9 +14,11 @@ int main() {
 		cout << "\tMENU:" << endl;
 		cout << "1. Add new worker" << endl;
 		cout << "2. Show all workers" << endl;
-		cout << "3. Search and edit" << endl;
-
-		cout << "4. Exit" << endl;
+		cout << "3. Search by surname" << endl;
+		cout << "4. Search by age" << endl;
+		cout << "5. Edit" << endl;
+		cout << "6. Delete worker" << endl;
+		cout << "7. Exit" << endl;
 		cout << endl;
 		cout << "Select action: ";
 		cin >> action;
@@ -33,19 +35,31 @@ int main() {
 		}break;
 		case 3: {
 			CLEAR;
-
+			search_by_surname();
 		}break;
 		case 4: {
 			CLEAR;
-			cout << "Bye" << endl;
+			search_by_age();
+		}break;
+		case 5: {
+			CLEAR;
+			edit();
+		}break;
+		case 6: {
+			CLEAR;
+			delete_worker();
+		}break;
+		case 7: {
+			CLEAR;
+			cout << "\n\t\t\tBye!" << endl;
 			break;
 		}
 		default: {
-			cout << "Please select action (1 - 4)" << endl;
+			cout << "Please select action (1 - 7)" << endl;
 		}
 		}
 
-	} while (action != 4);
+	} while (action != 7);
 
 
 

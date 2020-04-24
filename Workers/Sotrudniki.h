@@ -11,12 +11,12 @@ struct Worker {
 	string email;
 };
 
-struct Info {
-	Worker* OfficeWorker;
-	int Count;
-};
+
 void init();
 void addWorkers();
 void listWorkers();
-void search_edit();
-void insertWorker(Info W);
+void search_by_surname();
+void insertWorker(Worker data);
+void search_by_age();
+void edit();
+void delete_worker();
